@@ -1,24 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+package com.notapp.myapp;
 
-    <EditText
-        android:id="@+id/etNote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="اكتب ملاحظتك هنا"/>
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import java.util.ArrayList;
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="حفظ"/>
+public class MainActivity extends Activity {
 
-    <ListView
-        android:id="@+id/listNotes"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+    EditText etNote;
+    Button btnAdd;
+    ListView listNotes;
+    ArrayList<String> notes = new ArrayList<>();
+    ArrayAdapter<String> adapter;
+    SharedPreferences prefs;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etNote = findViewById(R.id.etNote);
+        btnAdd = findViewById(R.id.btnAdd);
+        listNotes = findViewById(R.id.listNotes);
+        prefs = getSharedPreferences("notes", MODE_PRIVATE);
+
+        loadNotes();
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, notes);
+        listNotes.setAdapter(adapter);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String text = etNote.getText().toString().trim();
+                if (!text.isEmpty()) {
+                    notes.add(text);
+                    adapter.notifyDataSetChanged();
+                    saveNotes();
+                    etNote.setText("");
+                }
+            }
+        });
+
+        listNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) {
+                notes.remove(pos);
+                adapter.notifyDataSetChanged();
+                saveNotes();
+                Toast.makeText(MainActivity.this, "تم الحذف", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+    }
+
+    void saveNotes() {
+        prefs.edit().putString("data", String.join("\n§§\n", notes)).apply();
+    }
+
+    void loadNotes() {
+        String data = prefs.getString("data", "");
+        if (!data.isEmpty()) {
+            for (String s : data.split("\n§§\n")) notes.add(s);
+        }
+    }
+}
