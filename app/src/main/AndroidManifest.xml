@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditText
-        android:id="@+id/etNote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="اكتب ملاحظتك هنا"/>
+    <application
+        android:allowBackup="true"
+        android:label="Note App"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.DarkActionBar">
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="حفظ"/>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-    <ListView
-        android:id="@+id/listNotes"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+    </application>
+
+</manifest>
