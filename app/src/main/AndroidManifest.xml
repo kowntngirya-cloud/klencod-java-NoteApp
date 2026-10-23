@@ -5,8 +5,8 @@
         android:allowBackup="true"
         android:label="Note App"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light.DarkActionBar">
-
+        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+       
         <activity
             android:name=".MainActivity"
             android:exported="true">
